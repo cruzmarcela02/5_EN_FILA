@@ -10,7 +10,7 @@ def dibuja_un_poligono():
     #gamelib.draw_begin()
     gamelib.draw_rectangle(120,170,170,120, fill='blue')
     #gamelib.draw_end()
-    gamelib.wait(gamelib.EventType.KeyPress)
+    gamelib.wait(gamelib.EventType.KeyPress) 
 
     #while gamelib.is_alive(): # Devuelve True si la pestana esta abierta
     while gamelib.loop():

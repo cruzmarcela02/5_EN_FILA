@@ -42,13 +42,6 @@ def mostrar_contenido():
 
 
 
-'''NO TE PODES OLVIDAR COMO VER RESULTADOS LPM'''
-def numeros():
-    for n in range(10):
-        print(n)
-
-#numeros() # printea del 0 al 9 -> 0123456789
-
 
 
 '''

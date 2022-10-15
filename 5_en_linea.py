@@ -35,25 +35,28 @@ def juego_crear():
             fila.append(VACIO)
         
         grilla.append(fila)
+    turno_jugador = True
+    mi_juego = {
+        'tablero' : grilla,
+        'turno': turno_jugador,
+        'jugador': CRUZ,
+    }
     
-    return grilla
+    return mi_juego
 
 
 def detectar_posicion(x,y):
 
-    #if (x == y) or (y > 300):
-    #    return None
-
-    if (x != y) and (0 <= x < 300) and (0 <= y < 300):
-        posicion_f = x // 30
-        posicion_c = y // 30
-    return posicion_c, posicion_f # retorna en forma de tupla
+    if  (0 <= x < 300) and (0 <= y < 300):
+        posicion_columna = x // 30 
+        posicion_fila = y // 30 
+    return posicion_fila, posicion_columna # retorna en forma de tupla
 
 
-def hay_jugada(juego,pos_x,pos_y):
+def hay_jugada(juego, posicion_fila, posicion_columna):
     '''Devolvera True si hay X - O, si no hay nada devuelve False -- (juego,x,y)'''
     #pos_x , pos_y = detectar_posicion(x,y)
-    return juego[pos_x][pos_y] == CRUZ or juego[pos_x][pos_y] == CIRCULO
+    return juego[posicion_fila][posicion_columna] == CRUZ or juego[posicion_fila][posicion_columna] == CIRCULO
 
 
 def se_acabo(juego):
@@ -80,20 +83,30 @@ def juego_actualizar(juego, x, y):
     Obtenemos las coordenadas de la casilla a jugar
     '''
 
-    ubi_col, ubi_fila = detectar_posicion(x,y)
-    ###jugada = CRUZ
-
+    ubicacion_fila, ubicacion_columna = detectar_posicion(x,y)
+    
     '''
     Jugada valida, cuando la casilla esta vacia.
     ------invalida, cuando la casilla ya tiene un valor. X - O
     '''
+    grilla = juego['tablero']
     
-    if not hay_jugada(juego,ubi_fila,ubi_col):
-        juego[ubi_col][ubi_fila] = CRUZ
-        print(juego)
+    if juego['turno'] == True:
+        
+        if not hay_jugada(grilla, ubicacion_fila, ubicacion_columna):
+            grilla[ubicacion_fila][ubicacion_columna] = CRUZ
+            juego['turno'] = False
+            juego['jugador'] = CIRCULO
+            print(grilla)
     else:
-        juego[ubi_col][ubi_fila] = CIRCULO
-        print(juego)
+
+        if not hay_jugada(grilla, ubicacion_fila, ubicacion_columna):
+            grilla[ubicacion_fila][ubicacion_columna] = CIRCULO
+            juego['turno'] = True
+            juego['jugador'] = CRUZ
+            print(grilla)
+    
+         
     
     
     '''
@@ -116,8 +129,10 @@ def juego_mostrar(juego):
 
         gamelib.draw_line(linea,0,linea,300)
         gamelib.draw_line(0,linea,300,linea)
-        
-    gamelib.draw_text(f'Es turno de: ', 150, 320) # si hacemos click aca ce cierra y da error
+    
+    
+    
+    gamelib.draw_text(f'Es turno de: {juego["jugador"]}', 150, 320) # si hacemos click aca ce cierra y da error
 
 
 def main():
@@ -152,9 +167,6 @@ def main():
         if ev.type == gamelib.EventType.ButtonPress:
             # El usuario presionó un botón del mouse
             x, y = ev.x, ev.y # averiguamos la posición donde se hizo click
-
-            jej = detectar_posicion(x,y)
-            print(jej)
 
             juego = juego_actualizar(juego, x, y)
 
