@@ -3,29 +3,15 @@ import gamelib
 
 ANCHO_VENTANA = 300
 ALTO_VENTANA = 340
-SIZE = 300
 TITLE = '5 EN FILA'
 VACIO = ''
 CRUZ = 'X'
 CIRCULO = 'O'
-turno_x = True
 
 '''
-Diseno del grilla 10 x 10 
-Lista de lista de cadenas
-[
-    [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ']
-    [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ']
-    [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ']
-    [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ']
-    [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ']
-    [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ']
-    [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ']
-    [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ']
-    [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ']
-    [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ']
-]
+Diseno del grilla 10 x 10 - Lista de lista de cadena
 '''
+
 def juego_crear():
     """Inicializar el estado del juego"""
     grilla = []
@@ -36,6 +22,7 @@ def juego_crear():
         
         grilla.append(fila)
     turno_jugador = True
+
     mi_juego = {
         'grilla' : grilla,
         'turno': turno_jugador,
@@ -56,7 +43,6 @@ def detectar_posicion(x,y):
 
 def hay_jugada(juego, posicion_fila, posicion_columna):
     '''Devolvera True si hay X - O, si no hay nada devuelve False -- (juego,x,y)'''
-    #pos_x , pos_y = detectar_posicion(x,y)
     return juego[posicion_fila][posicion_columna] == CRUZ or juego[posicion_fila][posicion_columna] == CIRCULO
 
 
@@ -91,14 +77,15 @@ def juego_actualizar(juego, x, y):
     ubicacion_fila, ubicacion_columna = detectar_posicion(x,y)
     if ubicacion_fila == None or ubicacion_columna == None:
         return juego
-    '''
-    Jugada valida, cuando la casilla esta vacia.
-    ------invalida, cuando la casilla ya tiene un valor. X - O
-    '''
+    
     grilla = juego['grilla']
 
     
     if juego['turno'] == True:
+        '''
+        Jugada valida, cuando la casilla esta vacia.
+        Jugada invalida, cuando la casilla ya tiene un valor. X - O
+        '''
         
         if not hay_jugada(grilla, ubicacion_fila, ubicacion_columna):
             grilla[ubicacion_fila][ubicacion_columna] = CRUZ
@@ -106,7 +93,10 @@ def juego_actualizar(juego, x, y):
             juego['jugador'] = CIRCULO
             print(grilla)
     else:
-
+        '''
+        Si la casilla ya tiene una jugada entonces no de puede
+        sobreponer una jugada
+        '''
         if not hay_jugada(grilla, ubicacion_fila, ubicacion_columna):
             grilla[ubicacion_fila][ubicacion_columna] = CIRCULO
             juego['turno'] = True
@@ -114,10 +104,7 @@ def juego_actualizar(juego, x, y):
             print(grilla)
     
          
-    '''
-    Si la casilla ya tiene una jugada entonces no de puede
-    sobreponer una jugada
-    '''
+    
     
     return juego
 
