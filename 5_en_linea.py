@@ -37,7 +37,7 @@ def juego_crear():
         grilla.append(fila)
     turno_jugador = True
     mi_juego = {
-        'tablero' : grilla,
+        'grilla' : grilla,
         'turno': turno_jugador,
         'jugador': CRUZ,
     }
@@ -50,8 +50,9 @@ def detectar_posicion(x,y):
     if  (0 <= x < 300) and (0 <= y < 300):
         posicion_columna = x // 30 
         posicion_fila = y // 30 
-    return posicion_fila, posicion_columna # retorna en forma de tupla
-
+        return posicion_fila, posicion_columna # retorna en forma de tupla
+    else:
+        return None,None
 
 def hay_jugada(juego, posicion_fila, posicion_columna):
     '''Devolvera True si hay X - O, si no hay nada devuelve False -- (juego,x,y)'''
@@ -69,6 +70,10 @@ def se_acabo(juego):
                 return False
     return True
 
+def detectar_centro_interfaz(ubicacion_fila, ubicacion_columna):
+    centro_x = (ubicacion_columna * 30) + 15
+    centro_y = (ubicacion_fila * 30) + 15
+    return centro_x, centro_y
 
 def juego_actualizar(juego, x, y):
     """Actualizar el estado del juego
@@ -84,12 +89,14 @@ def juego_actualizar(juego, x, y):
     '''
 
     ubicacion_fila, ubicacion_columna = detectar_posicion(x,y)
-    
+    if ubicacion_fila == None or ubicacion_columna == None:
+        return juego
     '''
     Jugada valida, cuando la casilla esta vacia.
     ------invalida, cuando la casilla ya tiene un valor. X - O
     '''
-    grilla = juego['tablero']
+    grilla = juego['grilla']
+
     
     if juego['turno'] == True:
         
@@ -107,15 +114,11 @@ def juego_actualizar(juego, x, y):
             print(grilla)
     
          
-    
-    
     '''
     Si la casilla ya tiene una jugada entonces no de puede
     sobreponer una jugada
     '''
     
-    
-
     return juego
 
 
@@ -124,13 +127,16 @@ def juego_mostrar(juego):
     #gamelib.draw_text('5 en línea', 150, 20)
 
     '''LO QUE HAGO YO'''
-    grilla = juego_crear() 
+    grilla = juego['grilla']
     for linea in range (0,301,30):
 
         gamelib.draw_line(linea,0,linea,300)
         gamelib.draw_line(0,linea,300,linea)
-    
-    
+
+    for f in range(10):
+        for c in range(10):
+            x , y = detectar_centro_interfaz(f,c)
+            gamelib.draw_text(f"{grilla[f][c]}", x, y )
     
     gamelib.draw_text(f'Es turno de: {juego["jugador"]}', 150, 320) # si hacemos click aca ce cierra y da error
 
